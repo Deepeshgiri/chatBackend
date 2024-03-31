@@ -24,6 +24,9 @@ app.use("/api/auth", authRoutes);
 app.use('/api/message' , messageRoutes);
 app.use('/api/users' , userRoutes);
 
+app.get('/test' , (req, res)=>{
+  res.send(" habibi, I am a happy server!!!")
+})
 
 app.listen(PORT, () => {
   connectDB();
