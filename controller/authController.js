@@ -6,15 +6,19 @@ const login = async (req, res) => {
   try {
     const { userName, password } = req.body;
     const user = await User.findOne({ userName });
-    const passwordCompare = await bcrypt.compare(password, user?.password);
+    console.log(user, req.body)
+    if (!user) {
+          return res.status(400).json({ error:"something went wrong", message: "Invalid user name " });
+        }
+    const passwordCompare = await bcrypt.compare(password, user.password)
 
     if (!user || !passwordCompare) {
-      return res.status(400).json({ message: "invalid user name or password" });
+      return res.status(400).json({error:"something went wrong",  message: "invalid user name or password" });
     }
     generateTokenAndSetCookie(user._id, res);
     return res.status(200).json({
       userName: user.userName,
-      name: user.name,
+      name: user.fullNamename,
       email: user.email,
       profilePic: user.profilePic,
     });
@@ -56,7 +60,7 @@ const signUp = async (req, res) => {
   try {
     const {
       userName,
-      name,
+      fullName,
       password,
       confirmPassword,
       gender,
@@ -66,10 +70,10 @@ const signUp = async (req, res) => {
     if (password !== confirmPassword) {
       return res.status(400).json({ error: "password don't match" });
     }
-    const user = await User.findOne({ userName });
+    const user = await User.findOne({ email });
 
     if (user) {
-      return res.status(201).json({ message: "Duplicate user" });
+      return res.status(201).json({ error: "Duplicate user" });
     }
 
     const profilePic = `https://avatar.iran.liara.run/public/${gender}?username=${userName}`;
@@ -79,7 +83,7 @@ const signUp = async (req, res) => {
 
     const newUser = new User({
       userName,
-      name,
+      fullName,
       password: hashedPassword,
       profilePic,
       gender,
@@ -90,7 +94,7 @@ const signUp = async (req, res) => {
     const Token = await generateTokenAndSetCookie(newUser._id, res);
     res.status(200).json({
       _id: data._id,
-      name: data.name,
+      fullName: data.fullName,
       userName: data.userName,
       email: data.email,
       profilePic: data.profilePic,
