@@ -16,7 +16,7 @@ const PORT = process.env.PORT;
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({origin:true, credentials:true}));
 app.use(morgan("short"));
 app.use(cookieParser())
 
@@ -25,6 +25,7 @@ app.use('/api/message' , messageRoutes);
 app.use('/api/users' , userRoutes);
 
 app.get('/test' , (req, res)=>{
+  res.cookie("test" , "wallahahabibi")
   res.send(" habibi, I am a happy server!!!!")
 })
 

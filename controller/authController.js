@@ -6,7 +6,7 @@ const login = async (req, res) => {
   try {
     const { userName, password } = req.body;
     const user = await User.findOne({ userName });
-    console.log(user, req.body)
+    // console.log(user, req.body)
     if (!user) {
           return res.status(400).json({ error:"something went wrong", message: "Invalid user name " });
         }
@@ -17,6 +17,7 @@ const login = async (req, res) => {
     }
     generateTokenAndSetCookie(user._id, res);
     return res.status(200).json({
+      _id:user._id,
       userName: user.userName,
       name: user.fullNamename,
       email: user.email,
@@ -66,6 +67,7 @@ const signUp = async (req, res) => {
       gender,
       email,
     } = req.body;
+    console.log(req.body)
 
     if (password !== confirmPassword) {
       return res.status(400).json({ error: "password don't match" });
@@ -76,7 +78,9 @@ const signUp = async (req, res) => {
       return res.status(201).json({ error: "Duplicate user" });
     }
 
-    const profilePic = `https://avatar.iran.liara.run/public/${gender}?username=${userName}`;
+    const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${userName}`;
+    const girlProfilePic = `https://avatar.iran.liara.run/public/girl?username=${userName}`;
+
     //hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -85,7 +89,7 @@ const signUp = async (req, res) => {
       userName,
       fullName,
       password: hashedPassword,
-      profilePic,
+      profilePic:gender === "male"? boyProfilePic:girlProfilePic,
       gender,
       email,
     });
