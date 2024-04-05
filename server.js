@@ -11,10 +11,11 @@ const messageRoutes = require("./routes/messageRoutes");
 
 const connectDB = require("./db/dbConnection");
 const cookieParser = require("cookie-parser");
+const { app, server } = require("./socket/socket");
 
 const PORT = process.env.PORT;
 
-const app = express();
+
 app.use(express.json());
 app.use(cors({origin:true, credentials:true}));
 app.use(morgan("short"));
@@ -29,7 +30,7 @@ app.get('/test' , (req, res)=>{
   res.send(" habibi, I am a happy server!!!!")
 })
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   connectDB();
   console.log(`server is running at ${PORT}`);
 });

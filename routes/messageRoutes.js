@@ -6,7 +6,7 @@ const router = express.Router()
 
 
 router.post('/send/:id', protectRoute, sendMessage)
-router.post('/get/:id', protectRoute,getMessage)
+router.get('/get/:id', protectRoute,getMessage)
 
 
 module.exports= router

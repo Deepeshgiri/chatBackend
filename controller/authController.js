@@ -19,7 +19,7 @@ const login = async (req, res) => {
     return res.status(200).json({
       _id:user._id,
       userName: user.userName,
-      name: user.fullNamename,
+      fullName: user.fullName,
       email: user.email,
       profilePic: user.profilePic,
     });
