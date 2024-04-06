@@ -34,8 +34,10 @@ const sendMessage = async (req, res) => {
     if (recieverSocketId) {
       io.to(recieverSocketId).emit("newMessage", newMessage);
     }
+    console.log("server recieve", recieverSocketId, "front senderid" , senderId)
     console.log("reciverid ", recieverSocketId);
-    res.json({ newMessage });
+
+    res.json( newMessage );
   } catch (error) {
     console.log("error in send message controller ", error);
     res.status(500).json({ error: "internal server error" });
